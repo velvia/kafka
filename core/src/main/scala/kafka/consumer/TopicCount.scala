@@ -1,10 +1,10 @@
 /*
  * Copyright 2010 LinkedIn
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *    http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
@@ -17,18 +17,16 @@
 package kafka.consumer
 
 import scala.collection._
-import scala.util.parsing.json.JSON
 import org.apache.log4j.Logger
+import kafka.utils.SyncJSON
 
 private[consumer] object TopicCount {
   private val logger = Logger.getLogger(getClass())
-  val myConversionFunc = {input : String => input.toInt}
-  JSON.globalNumberParser = myConversionFunc
 
   def constructTopicCount(consumerIdSting: String, jsonString : String) : TopicCount = {
     var topMap : Map[String,Int] = null
     try {
-      JSON.parseFull(jsonString) match {
+      SyncJSON.parseFull(jsonString) match {
         case Some(m) => topMap = m.asInstanceOf[Map[String,Int]]
         case None => throw new RuntimeException("error constructing TopicCount : " + jsonString)
       }
